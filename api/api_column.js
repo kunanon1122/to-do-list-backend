@@ -9,7 +9,7 @@ router.get("/columns", (req, res) => {
   connection.query(sql, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
-      res.status(500).send("Server error");
+      res.status(500).send({ message: "Server error" });
       return;
     }
     res.json(results);
@@ -18,13 +18,15 @@ router.get("/columns", (req, res) => {
 
 // post create column
 router.post("/create-column", (req, res) => {
-  const { title, step } = req.body;
+  const { title } = req.body;
 
-  if (!title || !step) {
+  if (!title) {
     console.error("Error bad request create-column");
-    res.status(400).send("bad request");
+    res.status(400).send({ message: "bad request" });
     return;
   }
+
+  const step = title.toLowerCase().replace(" ", "-");
 
   const sql =
     "INSERT INTO todolist.`board-columns` (title, step) VALUES (?, ?)";

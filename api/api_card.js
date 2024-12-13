@@ -9,7 +9,7 @@ router.get("/cards", (req, res) => {
   connection.query(sql, (err, results) => {
     if (err) {
       console.error("Error executing query:", err);
-      res.status(500).send("Server error");
+      res.status(500).send({ message: "Server error" });
       return;
     }
     res.json(results);
@@ -22,7 +22,7 @@ router.post("/create-card", (req, res) => {
 
   if (!title || !priority || !step || !tag) {
     console.error("Error bad request create-card");
-    res.status(400).send("bad request");
+    res.status(400).send({ message: "bad request" });
     return;
   }
 
@@ -31,7 +31,7 @@ router.post("/create-card", (req, res) => {
   connection.query(sql, [title, priority, step, tag], (err, results) => {
     if (err) {
       console.error("Error create-card:", err);
-      res.status(400).send("something wrong");
+      res.status(400).send({ message: "something wrong" });
       return;
     }
     return res.status(201).send({ message: "create card success!" });
