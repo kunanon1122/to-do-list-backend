@@ -40,4 +40,25 @@ router.post("/create-column", (req, res) => {
   });
 });
 
+// delete column
+router.delete("/delete-column/:id", (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    console.error("Error bad request delete-column");
+    res.status(400).send({ message: "bad request" });
+    return;
+  }
+
+  const sql = "DELETE FROM todolist.`board-columns` WHERE id = ?";
+  connection.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error delete-column:", err);
+      res.status(400).send("something wrong");
+      return;
+    }
+    return res.status(201).send({ message: "delete column success!" });
+  });
+});
+
 module.exports = router;
