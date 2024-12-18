@@ -18,24 +18,31 @@ router.get("/cards", (req, res) => {
 
 // post create card
 router.post("/create-card", (req, res) => {
-  const { title, priority, step, tag } = req.body;
+  const { title, step, priority, tag } = req.body;
 
-  if (!title || !priority || !step || !tag) {
+  if (!title || !step) {
     console.error("Error bad request create-card");
     res.status(400).send({ message: "bad request" });
     return;
   }
 
+  const priorityValue = priority ? priority : "";
+  const tagValue = tag ? tag : "";
+
   const sql =
-    "INSERT INTO todolist.cards (title, priority, step, tag) VALUES (?, ?, ?, ?)";
-  connection.query(sql, [title, priority, step, tag], (err, results) => {
-    if (err) {
-      console.error("Error create-card:", err);
-      res.status(400).send({ message: "something wrong" });
-      return;
+    "INSERT INTO todolist.cards (title, step, priority, tag) VALUES (?, ?,?,?)";
+  connection.query(
+    sql,
+    [title, step, priorityValue, tagValue],
+    (err, results) => {
+      if (err) {
+        console.error("Error create-card:", err);
+        res.status(400).send({ message: "something wrong" });
+        return;
+      }
+      return res.status(201).send({ message: "create card success!" });
     }
-    return res.status(201).send({ message: "create card success!" });
-  });
+  );
 });
 
 module.exports = router;
