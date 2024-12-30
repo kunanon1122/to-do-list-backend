@@ -82,7 +82,7 @@ jobs:
           echo "log taskDefinitionArn=${{ env.taskDefinitionArn }}"
 
       - name: Deploy updated task definition to ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: updated-task-def.json
           service: ${{ secrets.ECS_SERVICE_NAME }}
