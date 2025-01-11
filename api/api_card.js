@@ -45,4 +45,25 @@ router.post("/create-card", (req, res) => {
   );
 });
 
+// put update step card
+router.put("/update-step-card", (req, res) => {
+  const { id, step } = req.body;
+
+  if (!id || !step) {
+    console.error("Error bad request update-step-card");
+    res.status(400).send({ message: "bad request" });
+    return;
+  }
+
+  const sql = "UPDATE todolist.cards SET step = ? WHERE id = ?";
+  connection.query(sql, [step, id], (err, results) => {
+    if (err) {
+      console.error("Error update-step-card:", err);
+      res.status(400).send({ message: "something wrong" });
+      return;
+    }
+    return res.status(200).send({ message: "update step card success!" });
+  });
+});
+
 module.exports = router;
