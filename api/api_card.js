@@ -12,6 +12,7 @@ router.get("/cards", (req, res) => {
       res.status(500).send({ message: "Server error" });
       return;
     }
+
     res.json(results);
   });
 });
@@ -40,7 +41,8 @@ router.post("/create-card", (req, res) => {
         res.status(400).send({ message: "something wrong" });
         return;
       }
-      return res.status(201).send({ message: "create card success!" });
+
+      return res.status(200).send({ message: "create card success!" });
     }
   );
 });
@@ -62,6 +64,7 @@ router.put("/update-step-card", (req, res) => {
       res.status(400).send({ message: "something wrong" });
       return;
     }
+
     return res.status(200).send({ message: "update step card success!" });
   });
 });
@@ -83,6 +86,7 @@ router.delete("/delete-card", (req, res) => {
       res.status(400).send({ message: "something wrong" });
       return;
     }
+
     return res.status(200).send({ message: "delete card success!" });
   });
 });
