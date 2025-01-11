@@ -12,6 +12,7 @@ router.get("/cards", (req, res) => {
       res.status(500).send({ message: "Server error" });
       return;
     }
+
     res.json(results);
   });
 });
@@ -40,9 +41,54 @@ router.post("/create-card", (req, res) => {
         res.status(400).send({ message: "something wrong" });
         return;
       }
-      return res.status(201).send({ message: "create card success!" });
+
+      return res.status(200).send({ message: "create card success!" });
     }
   );
+});
+
+// put update step card
+router.put("/update-step-card", (req, res) => {
+  const { id, step } = req.body;
+
+  if (!id || !step) {
+    console.error("Error bad request update-step-card");
+    res.status(400).send({ message: "bad request" });
+    return;
+  }
+
+  const sql = "UPDATE todolist.cards SET step = ? WHERE id = ?";
+  connection.query(sql, [step, id], (err, results) => {
+    if (err) {
+      console.error("Error update-step-card:", err);
+      res.status(400).send({ message: "something wrong" });
+      return;
+    }
+
+    return res.status(200).send({ message: "update step card success!" });
+  });
+});
+
+// delete card
+router.delete("/delete-card", (req, res) => {
+  const { id } = req.body;
+
+  if (!id) {
+    console.error("Error bad request delete-card");
+    res.status(400).send({ message: "bad request" });
+    return;
+  }
+
+  const sql = "DELETE FROM todolist.cards WHERE id = ?";
+  connection.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error delete-card:", err);
+      res.status(400).send({ message: "something wrong" });
+      return;
+    }
+
+    return res.status(200).send({ message: "delete card success!" });
+  });
 });
 
 module.exports = router;
