@@ -66,4 +66,25 @@ router.put("/update-step-card", (req, res) => {
   });
 });
 
+// delete card
+router.delete("/delete-card", (req, res) => {
+  const { id } = req.body;
+
+  if (!id) {
+    console.error("Error bad request delete-card");
+    res.status(400).send({ message: "bad request" });
+    return;
+  }
+
+  const sql = "DELETE FROM todolist.cards WHERE id = ?";
+  connection.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error delete-card:", err);
+      res.status(400).send({ message: "something wrong" });
+      return;
+    }
+    return res.status(200).send({ message: "delete card success!" });
+  });
+});
+
 module.exports = router;
