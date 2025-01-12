@@ -17,6 +17,29 @@ router.get("/cards", (req, res) => {
   });
 });
 
+// get card by id
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    console.error("Error bad request get-card-by-id");
+    res.status(400).send({ message: "bad request" });
+    return;
+  }
+
+  const sql =
+    "SELECT id, title, step, priority, tag, description, CONVERT_TZ(create_date, '+00:00', '+07:00') AS create_date, CONVERT_TZ(update_date, '+00:00', '+07:00') AS update_date FROM todolist.cards WHERE id = ?";
+  connection.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error("Error get-card-by-id:", err);
+      res.status(400).send({ message: "something wrong" });
+      return;
+    }
+
+    res.json(results[0]);
+  });
+});
+
 // post create card
 router.post("/create-card", (req, res) => {
   const { title, step, priority, tag } = req.body;
@@ -45,6 +68,30 @@ router.post("/create-card", (req, res) => {
       return res.status(200).send({ message: "create card success!" });
     }
   );
+});
+
+// put update card description
+router.put("/update-card-description", (req, res) => {
+  const { id, description } = req.body;
+
+  if (!id) {
+    console.error("Error bad request update-card-description");
+    res.status(400).send({ message: "bad request" });
+    return;
+  }
+
+  const sql = "UPDATE todolist.cards SET description = ? WHERE id = ?";
+  connection.query(sql, [description, id], (err, results) => {
+    if (err) {
+      console.error("Error update-card-description:", err);
+      res.status(400).send({ message: "something wrong" });
+      return;
+    }
+
+    return res
+      .status(200)
+      .send({ message: "update card description success!" });
+  });
 });
 
 // put update step card
